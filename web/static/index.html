@@ -1,0 +1,1177 @@
+<!-- Copyright 2026 NXP -->
+<!-- SPDX-License-Identifier: BSD-3-Clause-->
+<!-- src/agent/web/static/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NXP Agentic AI NMS - NXP</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* iPhone Device Frame */
+        .whatsapp-panel {
+            width: 400px;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            padding-top: 200px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .whatsapp-panel.collapsed {
+            transform: translateX(420px);
+        }
+
+        .whatsapp-toggle {
+            background: #202c33;
+            border: 1px solid #2a2f32;
+            color: #8696a0;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: absolute;
+            left: -45px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            z-index: 10;
+        }
+
+        .whatsapp-toggle:hover {
+            background: #2a3942;
+            color: #e9edef;
+        }
+
+        .whatsapp-panel.collapsed #panelToggleIcon {
+            transform: rotate(180deg);
+        }
+
+        /* iPhone Frame */
+        .iphone-frame {
+            width: 360px;
+            height: 720px;
+            background: #1a1a1a;
+            border-radius: 45px;
+            padding: 12px;
+            box-shadow:
+                0 0 0 2px #2d2d2d,
+                0 0 0 4px #1a1a1a,
+                0 20px 60px rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* iPhone Notch */
+        .iphone-notch {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 28px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+            z-index: 100;
+        }
+
+        .notch-speaker {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: #0a0a0a;
+            border-radius: 3px;
+        }
+
+        .notch-camera {
+            position: absolute;
+            top: 8px;
+            right: 25px;
+            width: 10px;
+            height: 10px;
+            background: #0a0a0a;
+            border-radius: 50%;
+        }
+
+        /* iPhone Screen */
+        .iphone-screen {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border-radius: 35px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 44px;
+            background: #075e54;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            padding-top: 8px;
+            font-size: 13px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .status-time {
+            font-weight: 600;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .status-icons i {
+            font-size: 12px;
+        }
+
+        /* WhatsApp Header */
+        .whatsapp-header {
+            background: #075e54;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #fff;
+        }
+
+        .whatsapp-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .whatsapp-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .whatsapp-title-section {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .whatsapp-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #fff;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .whatsapp-subtitle {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.2;
+        }
+
+        .whatsapp-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .whatsapp-icon-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 0;
+            font-size: 20px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* WhatsApp Body */
+        .whatsapp-body {
+            flex: 1;
+            overflow-y: auto;
+            background: #0d1418;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%23000000" fill-opacity="0.05" width="100" height="100"/><path d="M0 0 L50 50 L0 100 L100 100 L50 50 L100 0 Z" fill="%23ffffff" fill-opacity="0.02"/></svg>');
+            background-size: 300px 300px;
+            padding: 12px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            height: calc(100% - 44px - 54px - 60px);
+        }
+
+        .whatsapp-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .whatsapp-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .whatsapp-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        /* WhatsApp Empty State */
+        .whatsapp-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #8696a0;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .whatsapp-empty i {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+            color: #25d366;
+        }
+
+        .whatsapp-empty-title {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #d1d7db;
+            font-weight: 400;
+        }
+
+        .whatsapp-empty-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #8696a0;
+        }
+
+        /* Date Divider */
+        .whatsapp-date-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 12px 0;
+        }
+
+        .whatsapp-date-label {
+            background: #182229;
+            color: #8696a0;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* WhatsApp Message Bubble */
+        .whatsapp-message {
+            max-width: 85%;
+            align-self: flex-start;
+            animation: slideInLeft 0.3s ease;
+            margin-bottom: 4px;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .whatsapp-bubble {
+            background: #1f2c34;
+            border-radius: 8px;
+            padding: 6px 8px 8px 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .whatsapp-bubble::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 8px 13px 0;
+            border-color: transparent #1f2c34 transparent transparent;
+        }
+
+        /* Severity Border */
+        .whatsapp-message.critical .whatsapp-bubble {
+            border-left: 3px solid #ff4444;
+        }
+
+        .whatsapp-message.high .whatsapp-bubble {
+            border-left: 3px solid #ffbb33;
+        }
+
+        .whatsapp-message.medium .whatsapp-bubble {
+            border-left: 3px solid #33b5e5;
+        }
+
+        .whatsapp-message.low .whatsapp-bubble {
+            border-left: 3px solid #00c851;
+        }
+
+        /* Message Header */
+        .whatsapp-message-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .whatsapp-sender {
+            font-size: 13px;
+            font-weight: 500;
+            color: #25d366;
+        }
+
+        .whatsapp-severity-badge {
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .whatsapp-severity-badge.critical {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff6b7a;
+        }
+
+        .whatsapp-severity-badge.high {
+            background: rgba(255, 187, 51, 0.2);
+            color: #ffd54f;
+        }
+
+        .whatsapp-severity-badge.medium {
+            background: rgba(51, 181, 229, 0.2);
+            color: #4fc3f7;
+        }
+
+        .whatsapp-severity-badge.low {
+            background: rgba(0, 200, 81, 0.2);
+            color: #66bb6a;
+        }
+
+        /* Message Type */
+        .whatsapp-message-type {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e9edef;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .whatsapp-message-type i {
+            font-size: 11px;
+            color: #25d366;
+        }
+
+        /* Message Text */
+        .whatsapp-message-text {
+            font-size: 14px;
+            color: #e9edef;
+            line-height: 1.4;
+            margin-bottom: 4px;
+            word-wrap: break-word;
+        }
+
+        /* Message Meta */
+        .whatsapp-message-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px solid rgba(134, 150, 160, 0.15);
+        }
+
+        .whatsapp-message-source {
+            font-size: 11px;
+            color: #8696a0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            max-width: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .whatsapp-message-source i {
+            font-size: 10px;
+        }
+
+        .whatsapp-message-time {
+            font-size: 11px;
+            color: #8696a0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .whatsapp-message-time i {
+            font-size: 10px;
+        }
+
+        /* Input Area */
+        .whatsapp-input-area {
+            background: #1e2a30;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-top: 1px solid #2a2f32;
+        }
+
+        .input-icon-btn {
+            background: none;
+            border: none;
+            color: #8696a0;
+            cursor: pointer;
+            padding: 8px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .whatsapp-input {
+            flex: 1;
+            background: #2a3942;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 16px;
+            color: #e9edef;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .whatsapp-input::placeholder {
+            color: #8696a0;
+        }
+
+        .send-button {
+            background: #00a884;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 18px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Home Indicator (iPhone) */
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .whatsapp-panel {
+                width: 360px;
+            }
+
+            .whatsapp-panel.collapsed {
+                transform: translateX(380px);
+            }
+
+            .iphone-frame {
+                width: 340px;
+                height: 680px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .whatsapp-panel {
+                position: fixed;
+                right: 0;
+                top: 73px;
+                height: calc(100vh - 73px);
+                z-index: 99;
+                padding: 10px;
+            }
+
+            .whatsapp-panel.collapsed {
+                transform: translateX(100%);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .whatsapp-panel {
+                width: 100%;
+                max-width: 380px;
+            }
+
+            .iphone-frame {
+                width: 320px;
+                height: 640px;
+            }
+        }
+
+        /* Pulse Animation */
+        @keyframes pulseGreen {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+
+            50% {
+                box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
+            }
+        }
+
+        .whatsapp-panel.pulse-notification .whatsapp-avatar {
+            animation: pulseGreen 1s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <i class="fas fa-shield-alt logo-icon"></i>
+                <h1>NXP Agentic AI Network Monitoring System</h1>
+            </div>
+            <div class="header-right">
+                <img src="/static/nxp-logo-color.svg" alt="NXP Logo" class="nxp-logo"
+                    onerror="this.style.display='none'">
+                <div class="status-indicator">
+                    <span class="status-dot" id="connectionStatus"></span>
+                    <span id="connectionText">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <a href="#" class="nav-item active" data-view="dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-item" data-view="devices">
+                        <i class="fas fa-network-wired"></i>
+                        <span>Devices</span>
+                    </a>
+                    <a href="#" class="nav-item" data-view="anomalies">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Anomalies</span>
+                    </a>
+                    <a href="#" class="nav-item" data-view="agent">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Agent</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content">
+                <!-- Dashboard View -->
+                <div id="dashboard-view" class="view active">
+                    <h2 class="view-title">Network Overview</h2>
+
+                    <!-- Statistics Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="totalDevices">0</div>
+                                <div class="stat-label">Total Devices</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon red">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="totalAnomalies">0</div>
+                                <div class="stat-label">Total Anomalies</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="recentAnomalies">0</div>
+                                <div class="stat-label">Last 24 Hours</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="networkStatus">Healthy</div>
+                                <div class="stat-label">Network Status</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Anomalies -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Recent Anomalies</h3>
+                            <button class="btn btn-sm" onclick="refreshDashboard()">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="recentAnomaliesList" class="anomaly-list">
+                                <div class="loading">Loading anomalies...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Devices View -->
+                <div id="devices-view" class="view">
+                    <h2 class="view-title">BACnet Devices</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Discovered Devices</h3>
+                            <button class="btn btn-sm" onclick="refreshDevices()">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="devicesTable" class="table-container">
+                                <div class="loading">Loading devices...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anomalies View -->
+                <div id="anomalies-view" class="view">
+                    <h2 class="view-title">Anomaly Detection</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>All Anomalies</h3>
+                            <div class="filter-group">
+                                <select id="anomalyTypeFilter" class="filter-select" onchange="filterAnomalies()">
+                                    <option value="">All Types</option>
+                                    <option value="duplicate_ip">Duplicate IP</option>
+                                    <option value="duplicate_instance">Duplicate Instance</option>
+                                    <option value="multi_instance_ip">Multi-Instance IP</option>
+                                    <option value="mac_multi_ip">MAC Multi-IP</option>
+                                </select>
+                                <button class="btn btn-sm" onclick="refreshAnomalies()">
+                                    <i class="fas fa-sync-alt"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="anomaliesTable" class="table-container">
+                                <div class="loading">Loading anomalies...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Agent View -->
+                <div id="agent-view" class="view">
+                    <h2 class="view-title">AI Security Agent</h2>
+                    <div class="card chat-card">
+                        <div class="card-body">
+                            <div id="chatMessages" class="chat-messages">
+                                <div class="chat-message agent">
+                                    <div class="message-avatar">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                    <div class="message-content">
+                                        <div class="message-text">
+                                            Hello! I'm your BACnet security assistant. I can help you analyze network
+                                            anomalies,
+                                            query device information, and provide security recommendations. How can I
+                                            assist you today?
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-container">
+                                <input type="text" id="chatInput" class="chat-input"
+                                    placeholder="Ask about network security, devices, or anomalies..."
+                                    onkeypress="handleChatKeyPress(event)">
+                                <button class="btn btn-primary" onclick="sendChatMessage()">
+                                    <i class="fas fa-paper-plane"></i> Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- iPhone WhatsApp Panel -->
+            <aside class="whatsapp-panel" id="whatsappPanel">
+                <button class="whatsapp-toggle" onclick="toggleWhatsAppPanel()">
+                    <i class="fas fa-chevron-right" id="panelToggleIcon"></i>
+                </button>
+
+                <div class="iphone-frame">
+                    <!-- iPhone Notch -->
+                    <div class="iphone-notch">
+                        <div class="notch-speaker"></div>
+                        <div class="notch-camera"></div>
+                    </div>
+
+                    <!-- iPhone Screen -->
+                    <div class="iphone-screen">
+                        <!-- Status Bar -->
+                        <div class="status-bar">
+                            <div class="status-time" id="statusTime">9:41</div>
+                            <div class="status-icons">
+                                <i class="fas fa-signal"></i>
+                                <i class="fas fa-wifi"></i>
+                                <i class="fas fa-battery-three-quarters"></i>
+                            </div>
+                        </div>
+
+                        <!-- WhatsApp Header -->
+                        <div class="whatsapp-header">
+                            <div class="whatsapp-header-left">
+                                <button class="back-button">
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                                <div class="whatsapp-avatar">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="whatsapp-title-section">
+                                    <div class="whatsapp-title">Security Notifications</div>
+                                    <div class="whatsapp-subtitle" id="whatsappSubtitle">tap for info</div>
+                                </div>
+                            </div>
+                            <div class="whatsapp-header-actions">
+                                <button class="whatsapp-icon-btn" onclick="refreshNotifications()">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <button class="whatsapp-icon-btn" onclick="clearAllNotifications()">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- WhatsApp Body -->
+                        <div class="whatsapp-body" id="whatsappMessages">
+                            <!-- Empty State -->
+                            <div class="whatsapp-empty">
+                                <i class="fab fa-whatsapp"></i>
+                                <div class="whatsapp-empty-title">No security alerts</div>
+                                <div class="whatsapp-empty-text">
+                                    Anomaly notifications will appear here<br>
+                                    in real-time when detected
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div class="whatsapp-input-area">
+                            <button class="input-icon-btn">
+                                <i class="far fa-smile"></i>
+                            </button>
+                            <input type="text" class="whatsapp-input" placeholder="Type a message" disabled>
+                            <button class="input-icon-btn">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <button class="send-button">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+
+                        <!-- Home Indicator -->
+                        <div class="home-indicator"></div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notificationToast" class="notification-toast">
+        <div class="toast-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">New Anomaly Detected</div>
+            <div class="toast-message"></div>
+        </div>
+        <button class="toast-close" onclick="closeToast()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+    <script src="/static/app.js"></script>
+    <script>
+        // Update status bar time
+        function updateStatusTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const timeString = `${hours}:${minutes.toString().padStart(2, '0')}`;
+            document.getElementById('statusTime').textContent = timeString;
+        }
+
+        // Update time every minute
+        updateStatusTime();
+        setInterval(updateStatusTime, 60000);
+
+        // WhatsApp Panel Management
+        let whatsappNotifications = [];
+        let isPanelCollapsed = false;
+
+        function toggleWhatsAppPanel() {
+            const panel = document.getElementById('whatsappPanel');
+            isPanelCollapsed = !isPanelCollapsed;
+
+            if (isPanelCollapsed) {
+                panel.classList.add('collapsed');
+            } else {
+                panel.classList.remove('collapsed');
+            }
+        }
+
+        function addWhatsAppNotification(anomaly) {
+            if (!anomaly.id) {
+                anomaly.id = 'anomaly-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            }
+
+            whatsappNotifications.unshift(anomaly);
+
+            if (whatsappNotifications.length > 100) {
+                whatsappNotifications = whatsappNotifications.slice(0, 100);
+            }
+
+            updateWhatsAppPanel();
+            updateWhatsAppSubtitle();
+
+            // Pulse animation
+            const panel = document.getElementById('whatsappPanel');
+            panel.classList.add('pulse-notification');
+            setTimeout(() => {
+                panel.classList.remove('pulse-notification');
+            }, 1000);
+        }
+
+        function updateWhatsAppPanel() {
+            const container = document.getElementById('whatsappMessages');
+
+            if (whatsappNotifications.length === 0) {
+                container.innerHTML = `
+                    <div class="whatsapp-empty">
+                        <i class="fab fa-whatsapp"></i>
+                        <div class="whatsapp-empty-title">No security alerts</div>
+                        <div class="whatsapp-empty-text">
+                            Anomaly notifications will appear here<br>
+                            in real-time when detected
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            let lastDate = null;
+
+            whatsappNotifications.forEach((anomaly, index) => {
+                const messageDate = formatDateDivider(anomaly.timestamp);
+
+                // Add date divider if date changed
+                if (messageDate !== lastDate) {
+                    html += `
+                        <div class="whatsapp-date-divider">
+                            <div class="whatsapp-date-label">${messageDate}</div>
+                        </div>
+                    `;
+                    lastDate = messageDate;
+                }
+
+                // Add message bubble
+                html += `
+                    <div class="whatsapp-message ${anomaly.severity || 'medium'}">
+                        <div class="whatsapp-bubble">
+                            <div class="whatsapp-message-header">
+                                <span class="whatsapp-sender">BACnet Monitor</span>
+                                <span class="whatsapp-severity-badge ${anomaly.severity || 'medium'}">
+                                    ${(anomaly.severity || 'medium').toUpperCase()}
+                                </span>
+                            </div>
+                            <div class="whatsapp-message-type">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                ${formatAnomalyType(anomaly.anomaly_type)}
+                            </div>
+                            <div class="whatsapp-message-text">
+                                ${escapeHtml(anomaly.description)}
+                            </div>
+                            <div class="whatsapp-message-meta">
+                                <div class="whatsapp-message-source" title="${anomaly.source_file || 'N/A'}">
+                                    <i class="fas fa-file-code"></i>
+                                    ${(anomaly.source_file || 'N/A').split('/').pop()}
+                                </div>
+                                <div class="whatsapp-message-time">
+                                    ${formatWhatsAppTime(anomaly.timestamp)}
+                                    <i class="fas fa-check-double" style="color: #53bdeb;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function updateWhatsAppSubtitle() {
+            const subtitle = document.getElementById('whatsappSubtitle');
+            const count = whatsappNotifications.length;
+
+            if (count === 0) {
+                subtitle.textContent = 'tap for info';
+            } else if (count === 1) {
+                subtitle.textContent = '1 message';
+            } else {
+                subtitle.textContent = `${count} messages`;
+            }
+        }
+
+        function formatDateDivider(timestamp) {
+            if (!timestamp) return 'UNKNOWN';
+
+            const date = new Date(timestamp);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            if (date.toDateString() === today.toDateString()) {
+                return 'TODAY';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return 'YESTERDAY';
+            } else {
+                return date.toLocaleDateString('en-US', {
+                    month: 'numeric',
+                    day: 'numeric',
+                    year: 'numeric'
+                }).toUpperCase();
+            }
+        }
+
+        function formatWhatsAppTime(timestamp) {
+            if (!timestamp) return '';
+
+            const date = new Date(timestamp);
+            let hours = date.getHours();
+            const minutes = date.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+
+            return `${hours}:${minutesStr} ${ampm}`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function clearAllNotifications() {
+            if (confirm('Clear all notifications?')) {
+                whatsappNotifications = [];
+                updateWhatsAppPanel();
+                updateWhatsAppSubtitle();
+            }
+        }
+
+        function refreshNotifications() {
+            loadInitialNotifications();
+        }
+
+        // Load initial notifications
+        async function loadInitialNotifications() {
+            try {
+                const response = await fetch('/api/anomalies?limit=50');
+                const data = await response.json();
+
+                if (data.status === 'success' && data.anomalies.length > 0) {
+                    whatsappNotifications = data.anomalies.map((anomaly, index) => ({
+                        ...anomaly,
+                        id: anomaly.id || 'anomaly-init-' + index
+                    }));
+                    updateWhatsAppPanel();
+                    updateWhatsAppSubtitle();
+                }
+            } catch (error) {
+                console.error('Error loading initial notifications:', error);
+            }
+        }
+
+        // Override the existing handleAnomalyNotification function
+        function handleAnomalyNotification(data) {
+            const toast = document.getElementById('notificationToast');
+            const messageEl = toast.querySelector('.toast-message');
+
+            const anomaly = data.anomaly;
+
+            // Add to WhatsApp panel
+            addWhatsAppNotification(anomaly);
+
+            messageEl.textContent = anomaly.description;
+
+            // Show toast
+            toast.classList.add('show');
+
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 10000);
+
+            // Refresh dashboard if active
+            const activeView = document.querySelector('.view.active');
+            if (activeView && activeView.id === 'dashboard-view') {
+                refreshDashboard();
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load initial notifications after a short delay
+            setTimeout(() => {
+                loadInitialNotifications();
+            }, 1000);
+        });
+
+        // Demo function to test WhatsApp notifications
+        function addDemoNotification() {
+            const demoAnomalies = [
+                {
+                    id: 'demo-' + Date.now(),
+                    anomaly_type: 'duplicate_ip',
+                    severity: 'critical',
+                    description: 'Duplicate IP address detected: 192.168.1.100 is being used by multiple devices on the network.',
+                    source_file: 'capture_2024_01_15.pcap',
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    id: 'demo-' + Date.now() + 1,
+                    anomaly_type: 'duplicate_instance',
+                    severity: 'high',
+                    description: 'Device instance number 12345 appears multiple times in the network topology.',
+                    source_file: 'capture_2024_01_15.pcap',
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    id: 'demo-' + Date.now() + 2,
+                    anomaly_type: 'mac_multi_ip',
+                    severity: 'medium',
+                    description: 'MAC address 00:1A:2B:3C:4D:5E is associated with multiple IP addresses.',
+                    source_file: 'capture_2024_01_15.pcap',
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    id: 'demo-' + Date.now() + 3,
+                    anomaly_type: 'arp_conflict',
+                    severity: 'low',
+                    description: 'ARP conflict detected between devices at 192.168.1.50 and 192.168.1.51.',
+                    source_file: 'capture_2024_01_15.pcap',
+                    timestamp: new Date().toISOString()
+                }
+            ];
+
+            const randomAnomaly = demoAnomalies[Math.floor(Math.random() * demoAnomalies.length)];
+            addWhatsAppNotification(randomAnomaly);
+        }
+
+        // Uncomment to test with demo notifications every 10 seconds
+        // setInterval(addDemoNotification, 10000);
+
+        // Add demo notification button for testing
+        console.log('To test notifications, run: addDemoNotification()');
+    </script>
+</body>
+
+</html>
