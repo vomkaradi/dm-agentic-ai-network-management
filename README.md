@@ -1,4 +1,7 @@
 # NXP Application Code Hub
+
+<!-- Note: This README documents the Agentic AI network management demo for NXP i.MX boards; see the Setup section below before running the demo. -->
+
 [<img src="https://mcuxpresso.nxp.com/static/icon/nxp-logo-color.svg" width="100"/>](https://www.nxp.com)
 
 ## i.MX 8M Plus / 95 - Ara240 Agentic Network Management System 
